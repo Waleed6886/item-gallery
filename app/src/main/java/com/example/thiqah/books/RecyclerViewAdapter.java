@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,13 +72,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(DummyDataViewHolder holder, int position) {
-        final CoverPhotos coverPhotos = photosDataList.get(position);
-        holder.bookName.setText(dummyDataList.get(position).getTitle());
-        Glide.with(holder.view.getContext()).load(coverPhotos.getUrl()).into(holder.coverPhoto);
-        holder.authorName.setText(authorsDataList.get(position).getFirstName());
-        holder.view.setTag(R.id.Books, dummyDataList.get(position));
-        holder.view.setTag(R.id.Authors, authorsDataList.get(position));
-        holder.view.setTag(R.id.Photos, photosDataList.get(position));
+
+        Log.d("log size", String.valueOf(getItemCount()) + " list size");
+        Log.d("log author", String.valueOf(authorsDataList.size() + " item"));
+        Log.d("log book", String.valueOf(dummyDataList.size() + " item"));
+        Log.d("log photo", String.valueOf(photosDataList.size() + " item"));
+        Log.d("log position", String.valueOf("at " + position));
+        Log.d("log position", "____________________________________");
+
+        if (position < photosDataList.size()) {
+            final CoverPhotos coverPhotos = photosDataList.get(position);
+            Glide.with(holder.view.getContext()).load(coverPhotos.getUrl()).into(holder.coverPhoto);
+            holder.view.setTag(R.id.Photos, photosDataList.get(position));
+        }
+        if (position < dummyDataList.size()) {
+            holder.bookName.setText(dummyDataList.get(position).getTitle());
+            holder.view.setTag(R.id.Books, dummyDataList.get(position));
+        }
+        if (position < authorsDataList.size()) {
+            holder.authorName.setText(authorsDataList.get(position).getFirstName());
+            holder.view.setTag(R.id.Authors, authorsDataList.get(position));
+        }
+       
+
+
     }
 
     @Override
@@ -96,21 +114,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void setDataList(List<Book> dummyDataList) {
+        Log.d("GG", "dummyDataList");
         this.dummyDataList = dummyDataList;
         notifyDataSetChanged();
     }
 
     void setPhotosDataList(List<CoverPhotos> photosDataList) {
+        Log.d("GG", "photosDataList");
         this.photosDataList = photosDataList;
         notifyDataSetChanged();
-
     }
 
     void setAuthorsDataList(List<Author> authorsDataList) {
-
+        Log.d("GG", "authorsDataList");
         this.authorsDataList = authorsDataList;
         notifyDataSetChanged();
-
     }
 }
 

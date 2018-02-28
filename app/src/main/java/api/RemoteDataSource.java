@@ -10,13 +10,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by Thiqah on 2/18/2018.
- */
-
 public class RemoteDataSource {
-
-
     Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl("http://fakerestapi.azurewebsites.net/")
             .addConverterFactory(GsonConverterFactory.create());
@@ -28,15 +22,11 @@ public class RemoteDataSource {
     Call<List<Author>> authorListCall = bookClient.allAuthors();
     Call<List<CoverPhotos>> coverPhotosListCall = bookClient.allPhotos();
 
-
-
-
     public void getBookListCall(final DataSource dataSource) {
         bookListCall.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 List<Book> books = response.body();
-                new LoadListTask().execute(books);
                 dataSource.passBookList(books);
 
             }
@@ -53,7 +43,6 @@ public class RemoteDataSource {
             @Override
             public void onResponse(Call<List<Author>> call, Response<List<Author>> response) {
                 List<Author> authorList = response.body();
-                new LoadListTask().execute(authorList);
                 dataSource.passAuthorList(authorList);
 
             }
@@ -70,7 +59,6 @@ public class RemoteDataSource {
             @Override
             public void onResponse(Call<List<CoverPhotos>> call, Response<List<CoverPhotos>> response) {
                 List<CoverPhotos> photosList = response.body();
-                new LoadListTask().execute(photosList);
                 dataSource.passCoverPhotoList(photosList);
             }
 
@@ -80,22 +68,4 @@ public class RemoteDataSource {
             }
         });
     }
-
-    private class LoadListTask extends AsyncTask<Void,List,Void> {
-
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            for(List list:b)
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(List[] values) {
-            super.onProgressUpdate(values);
-        }
-
-
-    }
-
 }

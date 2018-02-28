@@ -33,11 +33,9 @@ public class MainActivity extends AppCompatActivity implements DataSource {
 
     private static final String TAG = "MainActivity";
     private static final int MY_PERMISSIONS_REQUEST = 100;
-
-
+    LoadListTask loadListTask = new LoadListTask();
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-
     private RecyclerViewAdapter recyclerViewAdapter;
 
     @Override
@@ -49,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     }
 
     private void init() {
-
         setView();
 
         requestStoragePermission();
@@ -59,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         initializeAdapter();
 
         initializeData();
-
-
     }
 
     private void setView() {
@@ -89,15 +84,11 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     }
 
     private void initializeData() {
-
         RemoteDataSource remoteDataSource = new RemoteDataSource();
 
+        remoteDataSource.getCoverPhotosListCall(MainActivity.this);
         remoteDataSource.getBookListCall(MainActivity.this);
         remoteDataSource.getAuthorListCall(MainActivity.this);
-        remoteDataSource.getCoverPhotosListCall(MainActivity.this);
-
-
-
     }
 
     @Override
@@ -122,21 +113,42 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     }
 
     @Override
-    public void passBookList(List list) {
-
-        recyclerViewAdapter.setDataList(list);
+    public void passBookList(final List list) {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerViewAdapter.setDataList(list);
+            }
+        });
     }
 
     @Override
-    public void passAuthorList(List list) {
-
-        recyclerViewAdapter.setAuthorsDataList(list);
+    public void passAuthorList(final List list) {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerViewAdapter.setAuthorsDataList(list);
+            }
+        });
     }
 
     @Override
-    public void passCoverPhotoList(List list) {
+    public void passCoverPhotoList(final List list) {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerViewAdapter.setPhotosDataList(list);
 
-        recyclerViewAdapter.setPhotosDataList(list);
+            }
+        });
     }
+
+    private class LoadListTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+    }
+
 
 }
