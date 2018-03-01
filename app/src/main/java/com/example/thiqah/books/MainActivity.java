@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     LoadListTask loadListTask = new LoadListTask();
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    RecyclerViewAdapter recyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements DataSource {
 
     private void setView() {
         ButterKnife.bind(this);
-        recyclerView.setHasFixedSize(true);
     }
 
     private void requestStoragePermission() {
@@ -98,12 +97,9 @@ public class MainActivity extends AppCompatActivity implements DataSource {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     // permission was granted, yay! Do the
                     // file-related task you need to do.
-
                 } else {
-
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -114,33 +110,18 @@ public class MainActivity extends AppCompatActivity implements DataSource {
 
     @Override
     public void passBookList(final List list) {
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                recyclerViewAdapter.setDataList(list);
-            }
-        });
+        
+        recyclerViewAdapter.setDataList(list);
     }
 
     @Override
     public void passAuthorList(final List list) {
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                recyclerViewAdapter.setAuthorsDataList(list);
-            }
-        });
+        recyclerViewAdapter.setAuthorsDataList(list);
     }
 
     @Override
     public void passCoverPhotoList(final List list) {
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                recyclerViewAdapter.setPhotosDataList(list);
-
-            }
-        });
+        recyclerViewAdapter.setPhotosDataList(list);
     }
 
     private class LoadListTask extends AsyncTask<Void, Void, Void> {

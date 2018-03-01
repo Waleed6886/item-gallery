@@ -93,9 +93,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.authorName.setText(authorsDataList.get(position).getFirstName());
             holder.view.setTag(R.id.Authors, authorsDataList.get(position));
         }
-       
-
-
     }
 
     @Override
@@ -105,6 +102,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
+        Log.d("GG", String.valueOf(dummyDataList.size()));
         return dummyDataList.size();
     }
 
@@ -120,13 +118,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     void setPhotosDataList(List<CoverPhotos> photosDataList) {
-        Log.d("GG", "photosDataList");
+        Log.d("GG1", "photosDataList");
         this.photosDataList = photosDataList;
         notifyDataSetChanged();
     }
 
     void setAuthorsDataList(List<Author> authorsDataList) {
-        Log.d("GG", "authorsDataList");
+        Log.d("GG2", "authorsDataList");
         this.authorsDataList = authorsDataList;
         notifyDataSetChanged();
     }
