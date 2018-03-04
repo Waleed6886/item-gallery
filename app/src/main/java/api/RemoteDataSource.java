@@ -1,12 +1,9 @@
 package api;
 
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -16,11 +13,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RemoteDataSource {
-    private static final String TAG = "RemoteDataSource";
 
+    private static final String TAG = "RemoteDataSource";
 
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY);
+
     OkHttpClient.Builder okBuilder = new OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor);
 
@@ -28,7 +26,6 @@ public class RemoteDataSource {
             .baseUrl("http://fakerestapi.azurewebsites.net/")
             .client(okBuilder.build())
             .addConverterFactory(GsonConverterFactory.create());
-
 
     Retrofit retrofit = builder.build();
     BookClient bookClient = retrofit.create(BookClient.class);

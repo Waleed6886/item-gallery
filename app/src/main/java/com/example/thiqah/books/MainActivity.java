@@ -74,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         remoteDataSource.getCoverPhotosListCall(MainActivity.this);
         remoteDataSource.getBookListCall(MainActivity.this);
         remoteDataSource.getAuthorListCall(MainActivity.this);
-
-
     }
 
     @Override

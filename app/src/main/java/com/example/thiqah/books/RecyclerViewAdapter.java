@@ -77,16 +77,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new DummyDataViewHolder(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(DummyDataViewHolder holder, int position) {
-        Log.d("log size", String.valueOf(getItemCount()) + " list size");
-        Log.d("log author", String.valueOf(authorsDataList.size() + " item"));
-        Log.d("log book", String.valueOf(dummyDataList.size() + " item"));
-        Log.d("log photo", String.valueOf(photosDataList.size() + " item"));
-        Log.d("log position", String.valueOf("at " + position));
-        Log.d("log position", "____________________________________");
-
         if (position < photosDataList.size()) {
             Glide.with(holder.view.getContext()).load(photoArrayMap.get(dummyDataList.get(position).getID())).into(holder.coverPhoto);
             holder.view.setTag(R.id.Photos, photosDataList.get(position));
@@ -99,13 +91,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             String authorsCo = "";
             List<Author> authorsList = authorArrayMap.get(dummyDataList.get(position).getID());
             for (int i = 0; i < authorsList.size(); i++) {
-
-                authorsCo = authorsCo+" "+ authorsList.get(i).getFirstName();
+                authorsCo +=" "+authorsList.get(i).getFirstName();
             }
             holder.authorName.setText(authorsCo);
             holder.view.setTag(R.id.Authors, authorsDataList.get(position));
         }
-
     }
 
     @Override
@@ -115,7 +105,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        Log.d("GG getItemCount", String.valueOf(dummyDataList.size()));
         return dummyDataList.size();
     }
 
@@ -125,25 +114,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void setDataList(List<Book> dummyDataList) {
-        Log.d("log bookList", String.valueOf(dummyDataList.size()));
         this.dummyDataList = dummyDataList;
         notifyDataSetChanged();
     }
 
     void setPhotosDataList(List<CoverPhotos> photosDataList) {
-        Log.d("log photoList", String.valueOf(photosDataList.size()));
         this.photosDataList = photosDataList;
         if (photosDataList.size() != 0) {
             for (int i = 0; i < photosDataList.size(); i++) {
                 photoArrayMap.put(photosDataList.get(i).getIDBook(), photosDataList.get(i).getUrl());
             }
-            Log.d("Log photoArrayMap", String.valueOf(photoArrayMap.size()));
         }
         notifyDataSetChanged();
     }
 
     void setAuthorsDataList(List<Author> authorsDataList) {
-        //Log.d("log authorList", String.valueOf(authorsDataList.size()));
         this.authorsDataList = authorsDataList;
         if (authorsDataList.size() == 0) {
             return;
@@ -155,10 +140,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             list.add(authorsDataList.get(i));
             authorArrayMap.put(authorsDataList.get(i).getIDBook(), list);
-            Log.d("log forloop", String.valueOf(list.size()));
         }
-        Log.d("log authorArrayMap", String.valueOf(authorArrayMap.size()));
-
         notifyDataSetChanged();
     }
 }
