@@ -13,4 +13,5 @@ public interface DataSource {
     void passAuthorList(List list);
 
     void passCoverPhotoList(List list);
+
 }

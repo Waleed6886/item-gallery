@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -15,17 +16,18 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RemoteDataSource {
+    private static final String TAG = "RemoteDataSource";
 
-    HttpLoggingInterceptor loggingInterceptor =new HttpLoggingInterceptor()
+
+    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY);
-    OkHttpClient.Builder okBuilder =new OkHttpClient.Builder()
+    OkHttpClient.Builder okBuilder = new OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor);
 
     Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl("http://fakerestapi.azurewebsites.net/")
             .client(okBuilder.build())
             .addConverterFactory(GsonConverterFactory.create());
-
 
 
     Retrofit retrofit = builder.build();
@@ -47,7 +49,7 @@ public class RemoteDataSource {
             @Override
             public void onFailure(Call<List<Book>> call, Throwable t) {
                 Log.getStackTraceString(t);
-                Log.d("fail", "No book");
+                Log.d(TAG, "No book");
             }
         });
     }
@@ -74,8 +76,8 @@ public class RemoteDataSource {
         coverPhotosListCall.enqueue(new Callback<List<CoverPhotos>>() {
             @Override
             public void onResponse(Call<List<CoverPhotos>> call, Response<List<CoverPhotos>> response) {
-                List<CoverPhotos> photosList = response.body();
-                dataSource.passCoverPhotoList(photosList);
+                List<CoverPhotos> photos = response.body();
+                dataSource.passCoverPhotoList(photos);
             }
 
             @Override
@@ -87,4 +89,5 @@ public class RemoteDataSource {
             }
         });
     }
+
 }

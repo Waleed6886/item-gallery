@@ -10,30 +10,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.Toast;
-
 import java.util.List;
-
-import api.Author;
-import api.Book;
-import api.BookClient;
-import api.CoverPhotos;
 import api.DataSource;
 import api.RemoteDataSource;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements DataSource {
 
     private static final String TAG = "MainActivity";
     private static final int MY_PERMISSIONS_REQUEST = 100;
-    LoadListTask loadListTask = new LoadListTask();
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
@@ -88,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         remoteDataSource.getCoverPhotosListCall(MainActivity.this);
         remoteDataSource.getBookListCall(MainActivity.this);
         remoteDataSource.getAuthorListCall(MainActivity.this);
+
+
     }
 
     @Override
@@ -110,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements DataSource {
 
     @Override
     public void passBookList(final List list) {
-        
         recyclerViewAdapter.setDataList(list);
     }
 
@@ -123,13 +110,4 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     public void passCoverPhotoList(final List list) {
         recyclerViewAdapter.setPhotosDataList(list);
     }
-
-    private class LoadListTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            return null;
-        }
-    }
-
-
 }
