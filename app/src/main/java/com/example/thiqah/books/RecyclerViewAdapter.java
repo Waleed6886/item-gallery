@@ -14,12 +14,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ramotion.foldingcell.FoldingCell;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import api.Author;
 import api.Book;
 import api.CoverPhotos;
+import api.DataSource;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -59,6 +63,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView descriptionDetail;
         @BindView(R.id.content_Excerpt)
         TextView excerptTextView;
+        @BindView(R.id.publish_date)
+        TextView publish_date;
 
         View view;
 
@@ -115,8 +121,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.header_title.setText(dummyDataList.get(position).getTitle());
             holder.headImageTitleText.setText(dummyDataList.get(position).getTitle());
             holder.descriptionDetail.setText(dummyDataList.get(position).getDescription() + "");
-            holder.excerptTextView.setText(dummyDataList.get(position).getExcerpt()+"");
+            holder.excerptTextView.setText(dummyDataList.get(position).getExcerpt() + "");
             holder.view.setTag(R.id.Books, dummyDataList.get(position));
+
+
+            String d = dummyDataList.get(position).getPublishDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            try {
+                Date date = sdf.parse(d);
+                sdf= new SimpleDateFormat("dd MMM yyyy");
+                d = sdf.format(date);
+                holder.publish_date.setText(d);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+
         }
         if (position < authorsDataList.size()) {
             String authorsCo = "";

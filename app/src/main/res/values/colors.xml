@@ -18,5 +18,5 @@
     <color name="btnRequest">#ffbf12</color>
 
     <color name="gray">#e1f5fe</color>
-    <color name="black_overlay">#66000000</color>
+    <color name="black_overlay">#ffff</color>
 </resources>
