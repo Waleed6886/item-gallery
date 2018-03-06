@@ -1,13 +1,10 @@
 package com.example.thiqah.books;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import android.support.annotation.Nullable;
 import android.support.v4.util.SimpleArrayMap;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,21 +34,46 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public static class DummyDataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.card_view)
-        CardView cardView;
-        @BindView(R.id.book_name)
-        TextView bookName;
-        @BindView(R.id.author_name)
-        TextView authorName;
+        @BindView(R.id.folding_cell)
+        FoldingCell folding_cell;
+        @BindView(R.id.book_name_left)
+        TextView bookNameL;
+        @BindView(R.id.book_name_right)
+        TextView bookNameR;
+        @BindView(R.id.number_pages)
+        TextView pageNumber;
+        @BindView(R.id.number_author)
+        TextView authorNumber;
         @BindView(R.id.cover_photo)
         ImageView coverPhoto;
+        @BindView(R.id.header_bookTitle)
+        TextView header_title;
+        @BindView(R.id.head_image_Tile_text)
+        TextView headImageTitleText;
+        @BindView(R.id.head_image)
+        ImageView headImage;
+        @BindView(R.id.list_authors)
+        TextView authorList;
+        @Nullable
+        @BindView(R.id.description_detail)
+        TextView descriptionDetail;
+        @BindView(R.id.content_Excerpt)
+        TextView excerptTextView;
 
         View view;
 
         DummyDataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
+//            itemView.setOnClickListener(this);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    folding_cell.toggle(false);
+
+                }
+            });
             view = itemView;
         }
 
@@ -80,20 +103,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(DummyDataViewHolder holder, int position) {
         if (position < photosDataList.size()) {
-            Glide.with(holder.view.getContext()).load(photoArrayMap.get(dummyDataList.get(position).getID())).into(holder.coverPhoto);
+            String image = photoArrayMap.get(dummyDataList.get(position).getID());
+            Glide.with(holder.view.getContext()).load(image).into(holder.coverPhoto);
+            Glide.with(holder.view.getContext()).load(image).into(holder.headImage);
             holder.view.setTag(R.id.Photos, photosDataList.get(position));
         }
         if (position < dummyDataList.size()) {
-            holder.bookName.setText(dummyDataList.get(position).getTitle());
+            holder.bookNameL.setText(dummyDataList.get(position).getTitle());
+            holder.bookNameR.setText(dummyDataList.get(position).getTitle());
+            holder.pageNumber.setText(dummyDataList.get(position).getPageCount() + "");
+            holder.header_title.setText(dummyDataList.get(position).getTitle());
+            holder.headImageTitleText.setText(dummyDataList.get(position).getTitle());
+            holder.descriptionDetail.setText(dummyDataList.get(position).getDescription() + "");
+            holder.excerptTextView.setText(dummyDataList.get(position).getExcerpt()+"");
             holder.view.setTag(R.id.Books, dummyDataList.get(position));
         }
         if (position < authorsDataList.size()) {
             String authorsCo = "";
             List<Author> authorsList = authorArrayMap.get(dummyDataList.get(position).getID());
             for (int i = 0; i < authorsList.size(); i++) {
-                authorsCo +=" "+authorsList.get(i).getFirstName();
+                authorsCo += authorsList.get(i).getFirstName() + "\n";
             }
-            holder.authorName.setText(authorsCo);
+            holder.authorList.setText(authorsCo);
+            holder.authorNumber.setText(authorsList.size() + "");
             holder.view.setTag(R.id.Authors, authorsDataList.get(position));
         }
     }

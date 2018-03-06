@@ -10,6 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
+import com.ramotion.foldingcell.FoldingCell;
+
 import java.util.List;
 import api.DataSource;
 import api.RemoteDataSource;
@@ -23,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
