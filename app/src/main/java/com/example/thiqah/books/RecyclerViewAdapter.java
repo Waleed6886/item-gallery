@@ -111,12 +111,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(DummyDataViewHolder holder, int position) {
         if (position < photosDataList.size()) {
+            holder.folding_cell.fold(true);
             String image = photoArrayMap.get(dummyDataList.get(position).getID());
             Glide.with(holder.view.getContext()).load(image).into(holder.coverPhoto);
             Glide.with(holder.view.getContext()).load(image).into(holder.headImage);
             holder.view.setTag(R.id.Photos, photosDataList.get(position));
         }
         if (position < dummyDataList.size()) {
+            holder.folding_cell.fold(true);
             holder.bookNameL.setText(dummyDataList.get(position).getTitle());
             holder.bookNameR.setText(dummyDataList.get(position).getTitle());
             holder.pageNumber.setText(dummyDataList.get(position).getPageCount() + "");
@@ -142,6 +144,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
         if (position < authorsDataList.size()) {
+            holder.folding_cell.fold(true);
             String authorsCo = "";
             List<Author> authorsList = authorArrayMap.get(dummyDataList.get(position).getID());
             for (int i = 0; i < authorsList.size(); i++) {
