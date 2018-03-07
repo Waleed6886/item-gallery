@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.SimpleArrayMap;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView excerptTextView;
         @BindView(R.id.publish_date)
         TextView publish_date;
-
         View view;
 
         DummyDataViewHolder(View itemView) {
@@ -77,6 +77,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 @Override
                 public void onClick(View v) {
                     folding_cell.toggle(false);
+                    excerptTextView.setMovementMethod(new ScrollingMovementMethod());
+                    descriptionDetail.setMovementMethod(new ScrollingMovementMethod());
 
                 }
             });
