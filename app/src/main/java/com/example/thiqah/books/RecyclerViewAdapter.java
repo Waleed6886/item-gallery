@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.DummyDataViewHolder> {
 
-    private List<Book> dummyDataList = new ArrayList<>();
+    private List<Book> booksDataList = new ArrayList<>();
     private List<Author> authorsDataList = new ArrayList<>();
     private List<CoverPhotos> photosDataList = new ArrayList<>();
     private SimpleArrayMap<Integer, String> photoArrayMap = new SimpleArrayMap<>();
@@ -112,28 +112,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(DummyDataViewHolder holder, int position) {
         if (position < photosDataList.size()) {
             holder.folding_cell.fold(true);
-            String image = photoArrayMap.get(dummyDataList.get(position).getID());
+            String image = photoArrayMap.get(booksDataList.get(position).getID());
             Glide.with(holder.view.getContext()).load(image).into(holder.coverPhoto);
             Glide.with(holder.view.getContext()).load(image).into(holder.headImage);
             holder.view.setTag(R.id.Photos, photosDataList.get(position));
         }
-        if (position < dummyDataList.size()) {
+        if (position < booksDataList.size()) {
             holder.folding_cell.fold(true);
-            holder.bookNameL.setText(dummyDataList.get(position).getTitle());
-            holder.bookNameR.setText(dummyDataList.get(position).getTitle());
-            holder.pageNumber.setText(dummyDataList.get(position).getPageCount() + "");
-            holder.header_title.setText(dummyDataList.get(position).getTitle());
-            holder.headImageTitleText.setText(dummyDataList.get(position).getTitle());
-            holder.descriptionDetail.setText(dummyDataList.get(position).getDescription() + "");
-            holder.excerptTextView.setText(dummyDataList.get(position).getExcerpt() + "");
-            holder.view.setTag(R.id.Books, dummyDataList.get(position));
+            holder.bookNameL.setText(booksDataList.get(position).getTitle());
+            holder.bookNameR.setText(booksDataList.get(position).getTitle());
+            holder.pageNumber.setText(booksDataList.get(position).getPageCount() + "");
+            holder.header_title.setText(booksDataList.get(position).getTitle());
+            holder.headImageTitleText.setText(booksDataList.get(position).getTitle());
+            holder.descriptionDetail.setText(booksDataList.get(position).getDescription() + "");
+            holder.excerptTextView.setText(booksDataList.get(position).getExcerpt() + "");
+            holder.view.setTag(R.id.Books, booksDataList.get(position));
 
 
-            String d = dummyDataList.get(position).getPublishDate();
+            String d = booksDataList.get(position).getPublishDate();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             try {
                 Date date = sdf.parse(d);
-                sdf= new SimpleDateFormat("dd MMM yyyy");
+                sdf = new SimpleDateFormat("dd MMM yyyy");
                 d = sdf.format(date);
                 holder.publish_date.setText(d);
             } catch (ParseException e) {
@@ -141,12 +141,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
 
 
-
         }
         if (position < authorsDataList.size()) {
             holder.folding_cell.fold(true);
             String authorsCo = "";
-            List<Author> authorsList = authorArrayMap.get(dummyDataList.get(position).getID());
+            List<Author> authorsList = authorArrayMap.get(booksDataList.get(position).getID());
             for (int i = 0; i < authorsList.size(); i++) {
                 authorsCo += authorsList.get(i).getFirstName() + "\n";
             }
@@ -163,7 +162,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return dummyDataList.size();
+        return booksDataList.size();
     }
 
     @Override
@@ -171,8 +170,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return super.getItemId(position);
     }
 
-    public void setDataList(List<Book> dummyDataList) {
-        this.dummyDataList = dummyDataList;
+    public void setDataList(List<Book> booksDataList) {
+        this.booksDataList = booksDataList;
         notifyDataSetChanged();
     }
 

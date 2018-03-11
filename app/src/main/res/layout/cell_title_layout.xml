@@ -84,6 +84,7 @@
         android:paddingStart="15dp"
         android:paddingTop="10dp">
 
+
         <ImageView
             android:id="@+id/cover_photo"
             android:layout_width="70dp"

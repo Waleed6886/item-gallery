@@ -5,12 +5,13 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
 
 /**
  * Created by Thiqah on 2/18/2018.
  */
 
-public class Author implements Parcelable{
+public class Author extends SugarRecord<Author> implements Parcelable{
     @SerializedName("ID")
     @Expose
     private int iD;
