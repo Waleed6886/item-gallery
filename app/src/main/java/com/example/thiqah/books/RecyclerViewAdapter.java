@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import api.Author;
-import api.Book;
-import api.CoverPhotos;
-import api.DataSource;
+import com.example.thiqah.api.Author;
+import com.example.thiqah.api.Book;
+import com.example.thiqah.api.CoverPhotos;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -177,7 +177,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     void setPhotosDataList(List<CoverPhotos> photosDataList) {
         this.photosDataList = photosDataList;
-        if (photosDataList.size() != 0) {
+        if(photosDataList == null){
+            return;
+        }
+        else  {
             for (int i = 0; i < photosDataList.size(); i++) {
                 photoArrayMap.put(photosDataList.get(i).getIDBook(), photosDataList.get(i).getUrl());
             }

@@ -2,7 +2,6 @@ package com.example.thiqah.books;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -10,13 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.List;
-import api.DataSource;
-import api.RemoteDataSource;
+import com.example.thiqah.api.DataSource;
+import com.example.thiqah.api.RemoteDataSource;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -101,16 +99,25 @@ public class MainActivity extends AppCompatActivity implements DataSource {
 
     @Override
     public void passBookList(final List list) {
-        recyclerViewAdapter.setDataList(list);
+        if (list == null)
+            return;
+        else
+             recyclerViewAdapter.setDataList(list);
     }
 
     @Override
     public void passAuthorList(final List list) {
-        recyclerViewAdapter.setAuthorsDataList(list);
+        if (list == null)
+            return;
+        else
+             recyclerViewAdapter.setAuthorsDataList(list);
     }
 
     @Override
     public void passCoverPhotoList(final List list) {
-        recyclerViewAdapter.setPhotosDataList(list);
+        if (list == null)
+            return;
+        else
+            recyclerViewAdapter.setPhotosDataList(list);
     }
 }

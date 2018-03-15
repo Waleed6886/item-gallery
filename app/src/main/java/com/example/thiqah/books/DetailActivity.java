@@ -7,11 +7,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.List;
-
-import api.Author;
-import api.Book;
-import api.CoverPhotos;
+import com.example.thiqah.api.Author;
+import com.example.thiqah.api.Book;
+import com.example.thiqah.api.CoverPhotos;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

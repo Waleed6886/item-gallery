@@ -1,4 +1,4 @@
-package api;
+package com.example.thiqah.api;
 
 import java.util.List;
 

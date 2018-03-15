@@ -1,4 +1,4 @@
-package api;
+package com.example.thiqah.api;
 
 import android.os.Parcel;
 import android.os.Parcelable;
