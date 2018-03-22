@@ -2,21 +2,28 @@ package com.example.thiqah.books;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
-import com.ramotion.foldingcell.FoldingCell;
-
-import java.util.List;
+import com.example.thiqah.Model.Author;
+import com.example.thiqah.Model.Book;
+import com.example.thiqah.Model.CoverPhotos;
 import com.example.thiqah.api.DataSource;
 import com.example.thiqah.api.RemoteDataSource;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity implements DataSource {
 
@@ -24,14 +31,21 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     private static final int MY_PERMISSIONS_REQUEST = 100;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.swiperefresh)
+    SwipeRefreshLayout mySwipeRefreshLayout;
     RecyclerViewAdapter recyclerViewAdapter;
+    Realm realm;
+    RealmResults<Book> bookRealmResults;
+    RealmResults<Author> authorRealmResults;
+    RealmResults<CoverPhotos> photosRealmResults;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // opens "books.realm"
+        realm = Realm.getDefaultInstance();
         init();
     }
 
@@ -45,12 +59,29 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         initializeAdapter();
 
         initializeData();
+
+        swipeRefresh();
     }
 
+    private void swipeRefresh() {
+
+        mySwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        myUpdateOperation();
+                        mySwipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+        );
+    }
+
+    //Inject the views
     private void setView() {
         ButterKnife.bind(this);
     }
 
+    //ask for permission to read and write
     private void requestStoragePermission() {
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -61,17 +92,32 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         }
     }
 
+    //initialize Layout Manger for the adapter
     private void initializeLayoutManager() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
+    //initialize the adapter
     private void initializeAdapter() {
         recyclerViewAdapter = new RecyclerViewAdapter();
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 
+    //bring the data from the remote source
     private void initializeData() {
+        //Read the database for offline data
+        bookRealmResults = realm.where(Book.class).findAll();
+        authorRealmResults = realm.where(Author.class).findAll();
+        photosRealmResults = realm.where(CoverPhotos.class).findAll();
+
+        passBookList(bookRealmResults);
+        passAuthorList(authorRealmResults);
+        passCoverPhotoList(photosRealmResults);
+    }
+
+    private void myUpdateOperation() {
+        //take data from the remote source
         RemoteDataSource remoteDataSource = new RemoteDataSource();
 
         remoteDataSource.getCoverPhotosListCall(MainActivity.this);
@@ -99,25 +145,53 @@ public class MainActivity extends AppCompatActivity implements DataSource {
 
     @Override
     public void passBookList(final List list) {
-        if (list == null)
-            return;
-        else
-             recyclerViewAdapter.setDataList(list);
+        if (bookRealmResults.size() == 0) {
+            myUpdateOperation();
+        } else {
+            if (list == null) {
+                Log.w("error", "book list is empty");
+                return;
+            }
+            else {
+                recyclerViewAdapter.setDataList(list);
+            }
+        }
     }
 
     @Override
     public void passAuthorList(final List list) {
-        if (list == null)
-            return;
-        else
-             recyclerViewAdapter.setAuthorsDataList(list);
+        if (authorRealmResults.size() == 0) {
+            myUpdateOperation();
+        } else {
+            if (list == null) {
+                Log.w("error", "author list is empty");
+                return;
+            }
+            else {
+                recyclerViewAdapter.setAuthorsDataList(list);
+
+            }
+        }
     }
 
     @Override
     public void passCoverPhotoList(final List list) {
-        if (list == null)
-            return;
-        else
-            recyclerViewAdapter.setPhotosDataList(list);
+        if (photosRealmResults.size() == 0) {
+            myUpdateOperation();
+        } else {
+            if (list == null) {
+                Log.w("error", "photos list is empty");
+                return;
+            }
+            else {
+                recyclerViewAdapter.setPhotosDataList(list);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        realm.close();
     }
 }

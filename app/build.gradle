@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 27
@@ -26,11 +27,14 @@ configurations.all {
             }
         }
     }
+    realm {
+        syncEnabled = true;
+    }
 }
 
 dependencies {
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
@@ -44,10 +48,14 @@ dependencies {
     compile 'com.android.support:cardview-v7:27.1.0'
     compile 'com.android.support:recyclerview-v7:27.1.0'
 
-
     compile 'com.jakewharton:butterknife:8.8.1'
 
-    compile 'com.github.satyan:sugar:1.3'
+    //stetho-realm
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.uphyca:stetho_realm:2.1.0'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp:1.5.0'
+    compile 'com.facebook.stetho:stetho-urlconnection:1.5.0'
 
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])

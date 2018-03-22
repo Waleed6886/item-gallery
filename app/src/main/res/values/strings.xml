@@ -34,4 +34,5 @@
     <string name="published_date">Published:</string>
     <string name="description">Description</string>
     <string name="Excerpt">Excerpt</string>
+    <string name="menu_refresh">Refresh</string>
 </resources>

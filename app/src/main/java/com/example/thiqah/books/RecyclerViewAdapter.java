@@ -1,8 +1,10 @@
 package com.example.thiqah.books;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.util.SimpleArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
@@ -13,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.thiqah.Model.Author;
+import com.example.thiqah.Model.Book;
+import com.example.thiqah.Model.CoverPhotos;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.text.ParseException;
@@ -20,10 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.example.thiqah.api.Author;
-import com.example.thiqah.api.Book;
-import com.example.thiqah.api.CoverPhotos;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -108,6 +110,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new DummyDataViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onBindViewHolder(DummyDataViewHolder holder, int position) {
         if (position < photosDataList.size()) {
@@ -143,16 +146,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
         if (position < authorsDataList.size()) {
+            String authorsCo;
             holder.folding_cell.fold(true);
-            String authorsCo = "";
+            authorsCo = holder.authorList.getText().toString();
+            if (Objects.equals(authorsCo, "Authors")) {
+                authorsCo = "";
+            }
             List<Author> authorsList = authorArrayMap.get(booksDataList.get(position).getID());
             for (int i = 0; i < authorsList.size(); i++) {
-                authorsCo += authorsList.get(i).getFirstName() + "\n";
+                if(!authorsCo.contains(authorsList.get(i).getFirstName())) {
+                    authorsCo += authorsList.get(i).getFirstName() + "\n";
+                }
             }
             holder.authorList.setText(authorsCo);
-            holder.authorNumber.setText(authorsList.size() + "");
+            holder.authorNumber.setText(countline(authorsCo) + "");
             holder.view.setTag(R.id.Authors, authorsDataList.get(position));
         }
+    }
+
+    private int countline(String text) {
+        int numberOfLine = text.split("\n").length;
+        return numberOfLine;
     }
 
     @Override
