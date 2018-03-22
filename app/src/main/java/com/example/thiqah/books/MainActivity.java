@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.example.thiqah.Model.Author;
 import com.example.thiqah.Model.Book;
@@ -27,7 +30,7 @@ import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity implements DataSource {
 
-    private static final String TAG = "MainActivity";
+    static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST = 100;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         setContentView(R.layout.activity_main);
         // opens "books.realm"
         realm = Realm.getDefaultInstance();
+
+
         init();
     }
 
@@ -61,6 +66,38 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         initializeData();
 
         swipeRefresh();
+
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.refresh_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            // Check if user triggered a refresh:
+            case R.id.menu_refresh:
+                Log.i(LOG_TAG, "Refresh menu item selected");
+
+                // Signal SwipeRefreshLayout to start the progress indicator
+                mySwipeRefreshLayout.setRefreshing(true);
+
+                // Start the refresh background task.
+                // This method calls setRefreshing(false) when it's finished.
+                myUpdateOperation();
+                return true;
+        }
+
+        // User didn't trigger a refresh, let the superclass handle this action
+        return super.onOptionsItemSelected(item);
+
     }
 
     private void swipeRefresh() {
@@ -70,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements DataSource {
                     @Override
                     public void onRefresh() {
                         myUpdateOperation();
-                        mySwipeRefreshLayout.setRefreshing(false);
                     }
                 }
         );
@@ -123,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         remoteDataSource.getCoverPhotosListCall(MainActivity.this);
         remoteDataSource.getBookListCall(MainActivity.this);
         remoteDataSource.getAuthorListCall(MainActivity.this);
+        mySwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
