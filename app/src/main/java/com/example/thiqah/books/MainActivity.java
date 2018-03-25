@@ -159,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         remoteDataSource.getCoverPhotosListCall(MainActivity.this);
         remoteDataSource.getBookListCall(MainActivity.this);
         remoteDataSource.getAuthorListCall(MainActivity.this);
-        mySwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -197,6 +196,8 @@ public class MainActivity extends AppCompatActivity implements DataSource {
 
     @Override
     public void passAuthorList(final List list) {
+        mySwipeRefreshLayout.setRefreshing(false);
+
         if (authorRealmResults.size() == 0) {
             myUpdateOperation();
         } else {
