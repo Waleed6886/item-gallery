@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     RealmResults<Book> bookRealmResults;
     RealmResults<Author> authorRealmResults;
     RealmResults<CoverPhotos> photosRealmResults;
+    Boolean refreshDialogFlag = true;
 
 
     @Override
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         setContentView(R.layout.activity_main);
         // opens "books.realm"
         realm = Realm.getDefaultInstance();
+
 
 
         init();
@@ -70,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -89,8 +90,7 @@ public class MainActivity extends AppCompatActivity implements DataSource {
                 // Signal SwipeRefreshLayout to start the progress indicator
                 mySwipeRefreshLayout.setRefreshing(true);
 
-                // Start the refresh background task.
-                // This method calls setRefreshing(false) when it's finished.
+
                 myUpdateOperation();
                 return true;
         }
@@ -152,15 +152,6 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         passCoverPhotoList(photosRealmResults);
     }
 
-    private void myUpdateOperation() {
-        //take data from the remote source
-        RemoteDataSource remoteDataSource = new RemoteDataSource();
-
-        remoteDataSource.getCoverPhotosListCall(MainActivity.this);
-        remoteDataSource.getBookListCall(MainActivity.this);
-        remoteDataSource.getAuthorListCall(MainActivity.this);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -181,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements DataSource {
 
     @Override
     public void passBookList(final List list) {
+        refreshDialog();
         if (bookRealmResults.size() == 0) {
             myUpdateOperation();
         } else {
@@ -194,10 +186,10 @@ public class MainActivity extends AppCompatActivity implements DataSource {
         }
     }
 
+
     @Override
     public void passAuthorList(final List list) {
-        mySwipeRefreshLayout.setRefreshing(false);
-
+        refreshDialog();
         if (authorRealmResults.size() == 0) {
             myUpdateOperation();
         } else {
@@ -214,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements DataSource {
 
     @Override
     public void passCoverPhotoList(final List list) {
+        refreshDialog();
         if (photosRealmResults.size() == 0) {
             myUpdateOperation();
         } else {
@@ -231,5 +224,26 @@ public class MainActivity extends AppCompatActivity implements DataSource {
     protected void onDestroy() {
         super.onDestroy();
         realm.close();
+    }
+
+    private void refreshDialog() {
+        if(bookRealmResults.size() > 0
+                && authorRealmResults.size() > 0
+                && photosRealmResults.size() > 0 ) {
+            refreshDialogFlag = false;
+        }
+        else {
+            refreshDialogFlag = true;
+        }
+        mySwipeRefreshLayout.setRefreshing(refreshDialogFlag);
+    }
+
+    private void myUpdateOperation() {
+        //take data from the remote source
+        RemoteDataSource remoteDataSource = new RemoteDataSource();
+
+        remoteDataSource.getCoverPhotosListCall(MainActivity.this);
+        remoteDataSource.getBookListCall(MainActivity.this);
+        remoteDataSource.getAuthorListCall(MainActivity.this);
     }
 }

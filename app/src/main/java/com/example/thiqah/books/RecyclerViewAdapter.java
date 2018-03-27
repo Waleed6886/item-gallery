@@ -30,7 +30,8 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.DummyDataViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.DataViewHolder> {
+
 
     private List<Book> booksDataList = new ArrayList<>();
     private List<Author> authorsDataList = new ArrayList<>();
@@ -40,7 +41,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     List<Author> list;
 
 
-    public static class DummyDataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    public static class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.folding_cell)
         FoldingCell folding_cell;
         @BindView(R.id.book_name_left)
@@ -70,10 +72,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView publish_date;
         View view;
 
-        DummyDataViewHolder(View itemView) {
+        DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-//            itemView.setOnClickListener(this);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -104,15 +105,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public DummyDataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         view.setClickable(true);
-        return new DummyDataViewHolder(view);
+        return new DataViewHolder(view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void onBindViewHolder(DummyDataViewHolder holder, int position) {
+    public void onBindViewHolder(DataViewHolder holder, int position) {
         if (position < photosDataList.size()) {
             holder.folding_cell.fold(true);
             String image = photoArrayMap.get(booksDataList.get(position).getID());
@@ -132,16 +133,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.view.setTag(R.id.Books, booksDataList.get(position));
 
 
-            String d = booksDataList.get(position).getPublishDate();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-            try {
-                Date date = sdf.parse(d);
-                sdf = new SimpleDateFormat("dd MMM yyyy");
-                d = sdf.format(date);
-                holder.publish_date.setText(d);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            String publishDate = booksDataList.get(position).getPublishDate();
+            String date = dataFormatter(publishDate);
+            holder.publish_date.setText(date);
 
 
         }
@@ -154,17 +148,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
             List<Author> authorsList = authorArrayMap.get(booksDataList.get(position).getID());
             for (int i = 0; i < authorsList.size(); i++) {
-                if(!authorsCo.contains(authorsList.get(i).getFirstName())) {
+                if (!authorsCo.contains(authorsList.get(i).getFirstName())) {
                     authorsCo += authorsList.get(i).getFirstName() + "\n";
                 }
             }
             holder.authorList.setText(authorsCo);
-            holder.authorNumber.setText(countline(authorsCo) + "");
+            holder.authorNumber.setText(countLine(authorsCo) + "");
             holder.view.setTag(R.id.Authors, authorsDataList.get(position));
         }
     }
 
-    private int countline(String text) {
+
+
+    private String dataFormatter(String publishDate) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        try {
+            Date date = simpleDateFormat.parse(publishDate);
+            simpleDateFormat = new SimpleDateFormat("dd MMM yyyy");
+            publishDate = simpleDateFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return publishDate;
+    }
+
+    private int countLine(String text) {
         int numberOfLine = text.split("\n").length;
         return numberOfLine;
     }
@@ -184,17 +193,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return super.getItemId(position);
     }
 
-    public void setDataList(List<Book> booksDataList) {
+    void setDataList(List<Book> booksDataList) {
         this.booksDataList = booksDataList;
         notifyDataSetChanged();
     }
 
     void setPhotosDataList(List<CoverPhotos> photosDataList) {
         this.photosDataList = photosDataList;
-        if(photosDataList == null){
+        if (photosDataList == null) {
             return;
-        }
-        else  {
+        } else {
             for (int i = 0; i < photosDataList.size(); i++) {
                 photoArrayMap.put(photosDataList.get(i).getIDBook(), photosDataList.get(i).getUrl());
             }
